@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radhe Mobile &amp; Accessories - Inventory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-light: #e0e7ff;
+      --accent: #0ea5e9;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 16px 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      margin-bottom: 6px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.025em;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      background: var(--card-bg);
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+      height: fit-content;
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #f1f5f9;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 280px;
+      flex-wrap: wrap;
+    }
+
+    .input-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    select {
+      width: auto;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    input[type="text"]:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-reset {
+      background: white;
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .btn-security {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-security:hover {
+      background: var(--primary-hover);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+      background: white;
+    }
+
+    th {
+      background-color: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11.5px;
+      letter-spacing: 0.05em;
+      padding: 14px 20px;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .product-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .price-sell {
+      font-weight: 700;
+      color: #059669;
+      font-size: 15px;
+    }
+
+    .price-buy {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 15px;
+    }
+
+    .mask-dots {
+      letter-spacing: 3px;
+      color: #94a3b8;
+      font-size: 16px;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11.5px;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .empty-row {
+      text-align: center;
+      padding: 40px !important;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 1000;
+      background-color: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 16px 20px;
+      font-size: 13px;
+      border-top: 1px solid #1e293b;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+
+    footer strong {
+      color: #f8fafc;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footer-links a:hover {
+      color: #38bdf8;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .controls-bar { flex-direction: column; align-items: stretch; }
+      .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
+      select, .btn { width: 100%; }
+      header h1 { font-size: 20px; }
+      header p { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+
+    <h1>Radhe Mobile And Accessories</h1>
+    <p>Internal Retail Price &amp; Wholesale Ledger</p>
+  </header>
+
+  <div class="scroll-container">
+    <div class="container">
+
+      <div class="controls-bar">
+        <div class="filter-group">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Search products..." 
+              oninput="renderTable()"
+            >
+          </div>
+          <!-- Populated dynamically via JS -->
+          <select id="categoryFilter" onchange="renderTable()"></select>
+          <button type="button" class="btn btn-reset" onclick="resetFilters()">Reset</button>
+        </div>
+        <button id="toggleBtn" class="btn btn-security" onclick="toggleBuyingPrice()">Show Buying Price</button>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Selling Price</th>
+              <th>Buying Price</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div> Developed by <strong> Kanaiyalal Kumavat </strong></div>
+    <div class="footer-links">
+      <span>Need updates or support?</span>
+      <a href="mailto:kkanaiyalal61@gmail.com">Email Developer</a>
+      <a href="https://wa.me/919023976729" target="_blank" rel="noopener">WhatsApp Us</a>
+      <a href="tel:+919023976729">Call: +91 90239 76729</a>
+    </div>
+  </footer>
+
+  <!-- Embedded JSON dataset -->
+  <script id="inventoryData" type="application/json">
+  [
+    { "name": "Rapid+ Pendrive 4GB", "category": "Pendrive", "sellingPrice": 600, "buyingPrice": 310 },
+    { "name": "Rapid+ Pendrive 8GB", "category": "Pendrive", "sellingPrice": 700, "buyingPrice": 347 },
+    { "name": "Rapid+ Pendrive 16GB", "category": "Pendrive", "sellingPrice": 1000, "buyingPrice": 415 },
+    { "name": "Rapid+ Pendrive 32GB", "category": "Pendrive", "sellingPrice": 1300, "buyingPrice": 610 },
+    { "name": "Rapid+ Pendrive 64GB", "category": "Pendrive", "sellingPrice": 1500, "buyingPrice": 772 },
+    { "name": "Rapid+ Pendrive 128GB", "category": "Pendrive", "sellingPrice": 2500, "buyingPrice": 1500 },
+
+    { "name": "Flash Pendrive 4GB", "category": "Pendrive", "sellingPrice": 650, "buyingPrice": 310 },
+    { "name": "Flash Pendrive 8GB", "category": "Pendrive", "sellingPrice": 650, "buyingPrice": 310 },
+    { "name": "Flash Pendrive 16GB", "category": "Pendrive", "sellingPrice": 650, "buyingPrice": 310 },
+    { "name": "Flash Pendrive 32GB", "category": "Pendrive", "sellingPrice": 650, "buyingPrice": 310 },
+    { "name": "Flash Pendrive 64GB", "category": "Pendrive", "sellingPrice": 650, "buyingPrice": 310 },
+    { "name": "Flash Pendrive 128GB", "category": "Pendrive", "sellingPrice": 650, "buyingPrice": 310 },
+
+    { "name": "Memory Card 4GB", "category": "Memory Card", "sellingPrice": 500, "buyingPrice": 262 },
+    { "name": "Memory Card 8GB", "category": "Memory Card", "sellingPrice": 600, "buyingPrice": 270 },
+    { "name": "Memory Card 16GB", "category": "Memory Card", "sellingPrice": 700, "buyingPrice": 322 },
+    { "name": "Memory Card 32GB", "category": "Memory Card", "sellingPrice": 1200, "buyingPrice": 627 },
+    { "name": "Memory Card 64GB", "category": "Memory Card", "sellingPrice": 1800, "buyingPrice": 895 },
+    { "name": "Memory Card 128GB", "category": "Memory Card", "sellingPrice": 0, "buyingPrice": 0 },
+
+    { "name": "P10 10000mAh Power Bank", "category": "Powerbank", "sellingPrice": 1299, "buyingPrice": 780 },
+    { "name": "P12 20000mAh Power Bank", "category": "Powerbank", "sellingPrice": 1000, "buyingPrice": 510 },
+    { "name": "P18 20000mAh Power Bank", "category": "Powerbank", "sellingPrice": 1000, "buyingPrice": 625 },
+    { "name": "P23 20000mAh Power Bank", "category": "Powerbank", "sellingPrice": 1000, "buyingPrice": 1250 },
+    { "name": "P22 20000mAh Power Bank", "category": "Powerbank", "sellingPrice": 1000, "buyingPrice": 1200 },
+    { "name": "P12 20000mAh Power Bank", "category": "Powerbank", "sellingPrice": 1000, "buyingPrice": 510 },
+
+    { "name": "Type-C 65W Fast Charging Cable", "category": "Cables", "sellingPrice": 299, "buyingPrice": 90 },
+    { "name": "Braided Lightning iPhone Cable", "category": "Cables", "sellingPrice": 349, "buyingPrice": 110 },
+
+    { "name": "11D Edge-to-Edge Tempered Glass", "category": "Tempered Glass", "sellingPrice": 149, "buyingPrice": 25 },
+
+    { "name": "OTG Adapter (Type-C to USB 3.0)", "category": "Adapters", "sellingPrice": 99, "buyingPrice": 30 },
+
+    { "name": "Car Mobile Holder", "category": "Car Accessories", "sellingPrice": 399, "buyingPrice": 140 }
+  ]
+  </script>
+
+  <script>
+    const SECRET_PIN = "1234";
+    let showBuyingPrices = false;
+
+    const rawJSON = document.getElementById('inventoryData').textContent;
+    const products = JSON.parse(rawJSON);
+
+    // Automatically extract unique categories from products and populate the dropdown
+    function populateCategories() {
+      const categoryFilter = document.getElementById('categoryFilter');
+      
+      // Extract unique categories using a Set and sort alphabetically
+      const uniqueCategories = [...new Set(products.map(item => item.category))].sort();
+
+      categoryFilter.innerHTML = '<option value="All">All Categories</option>';
+      
+      uniqueCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+      });
+    }
+
+    function renderTable() {
+      const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+      const selectedCategory = document.getElementById('categoryFilter').value;
+      const tbody = document.getElementById('productTableBody');
+      tbody.innerHTML = '';
+
+      const filteredProducts = products.filter(item => {
+        const matchesCategory = (selectedCategory === 'All' || item.category === selectedCategory);
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filteredProducts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty-row">No products match your search or filter criteria.</td></tr>`;
+        return;
+      }
+
+      filteredProducts.forEach(item => {
+        const row = document.createElement('tr');
+        
+        const displayedBuyPrice = showBuyingPrices 
+          ? `<span class="price-buy">₹${item.buyingPrice.toLocaleString('en-IN')}</span>` 
+          : `<span class="mask-dots">••••••</span>`;
+
+        row.innerHTML = `
+          <td><span class="product-title">${item.name}</span></td>
+          <td><span class="badge">${item.category}</span></td>
+          <td><span class="price-sell">₹${item.sellingPrice.toLocaleString('en-IN')}</span></td>
+          <td>${displayedBuyPrice}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('categoryFilter').value = 'All';
+      renderTable();
+    }
+
+    function toggleBuyingPrice() {
+      if (!showBuyingPrices) {
+        const enteredPass = prompt("Enter PIN to view buying prices:");
+        if (enteredPass === SECRET_PIN) {
+          showBuyingPrices = true;
+          document.getElementById('toggleBtn').innerText = "Hide Buying Price";
+        } else if (enteredPass !== null) {
+          alert("Incorrect PIN!");
+        }
+      } else {
+        showBuyingPrices = false;
+        document.getElementById('toggleBtn').innerText = "Show Buying Price";
+      }
+      renderTable();
+    }
+
+    // Initialize dropdown options from data, then render table
+    populateCategories();
+    renderTable();
+  </script>
+
+</body>
+</html>
